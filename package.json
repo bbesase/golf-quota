@@ -1,8 +1,15 @@
 {
   "name": "tfd-golf-quota",
+  "packageManager": "yarn@3.2.1",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@babel/core": "7.18.5",
+    "@types/node": "16.11.41",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@typescript-eslint/eslint-plugin": "5.28.0",
+    "@typescript-eslint/parser": "5.28.0",
     "eslint": "8.17.0",
     "eslint-config-next": "12.1.6",
     "eslint-config-prettier": "8.5.0",
@@ -19,10 +26,10 @@
     "@testing-library/user-event": "13.5.0",
     "@types/jest": "27.5.2",
     "@types/node": "16.11.41",
-    "@types/react": "18.0.14",
-    "@types/react-dom": "^18.0.5",
-    "react": "^18.2.0",
-    "react-dom": "18.2.0",
+    "firebase": "^9.8.3",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "web-vitals": "2.1.4"
   },
@@ -31,6 +38,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "lint-staged": {
+    "*.{json,md,yml,css}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint --max-warnings=0 --fix",
+      "prettier --write"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +65,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@3.2.1"
+  }
 }
