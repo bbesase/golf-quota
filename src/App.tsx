@@ -21,10 +21,13 @@ export default function App() {
       })
     });
 
+    // THIS IS THE ONE
     const test = async () => {
       const querySnapshot = await getDocs(collection(getFirestore(), "tfd-golfers"));
       querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc}`);
+        // console.log(`${doc.id} => ${doc.data()}`);
+        const foo = doc.data();
+        console.log('document', doc, foo)
       });
     };
 
