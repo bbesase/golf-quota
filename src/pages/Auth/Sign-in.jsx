@@ -4,18 +4,19 @@ import { signInWithPopup } from "firebase/auth";
 import { useEffect } from "react";
 
 export default function SignIn() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(false);
 
   const handleClick = () => {
-
     signInWithPopup(auth, provider).then((data) => {
-      setValue(data.user.email)
-      localStorage.setItem("email", data.user.email)
+      if (data.user.email) {
+        setValue(true)
+        localStorage.setItem("authenticated", data.user.email)
+      }
     });
   }
 
   useEffect(() => {
-    setValue(localStorage.getItem('email'))
+    setValue(localStorage.getItem('authenticated'))
   }, [])
 
   return (
@@ -23,7 +24,10 @@ export default function SignIn() {
       { value ? 
         // <Home /> :
         <p>MADE IT</p> :
-        <button onClick={handleClick}>Signin With Google</button>
+        <div>
+          <div>Lets get you signed in</div>
+          <button onClick={handleClick}>Signin With Google</button>
+        </div>
       }
       
     </div>
