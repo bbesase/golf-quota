@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 // import firebase from 'firebase';
 import { getFirestore, collection, query, onSnapshot, getDocs, getDoc, collectionGroup, doc } from 'firebase/firestore';
+import SignIn from "./pages/Auth/Sign-in";
 
 export default function App() {
   // const firebaseApp = firebase.getApps[0];
@@ -52,6 +53,7 @@ export default function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           {/* {JSON.stringify(firebaseApp.options, null, 2)} */}
+          <SignIn />
         </p>
         <a
           className="App-link"

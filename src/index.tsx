@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirebaseConfig } from './firebase.config.js';
 import { BrowserRouter } from "react-router-dom";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,6 +16,9 @@ import { BrowserRouter } from "react-router-dom";
 // Initialize Firebase
 const app = initializeApp(getFirebaseConfig());
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+export {auth, provider};
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
