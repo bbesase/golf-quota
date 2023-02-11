@@ -1,13 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM, { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirebaseConfig } from './firebase.config.js';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import SignIn from './pages/Auth/Sign-in';
+import Homepage from './pages/Homepage/Home';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,15 +22,28 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 export {auth, provider};
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+// const root = ReactDOM.createRoot(
+//   document.getElementById('root') as HTMLElement
+// );
 
-root.render(
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <SignIn />,
+  },
+  {
+    path: '/home',
+    element: <Homepage />
+  },
+]);
+
+createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    {/* <BrowserRouter>
       <App />
-    </BrowserRouter>
+      <RouterProvider router={router} />
+    </BrowserRouter> */}
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
 
