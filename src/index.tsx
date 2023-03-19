@@ -10,6 +10,7 @@ import { BrowserRouter, RouterProvider, createBrowserRouter } from "react-router
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import SignIn from './pages/Auth/Sign-in';
 import Homepage from './pages/Homepage/Home';
+import { ChakraProvider } from '@chakra-ui/react'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -43,7 +44,9 @@ createRoot(document.getElementById('root')!).render(
       <App />
       <RouterProvider router={router} />
     </BrowserRouter> */}
-    <RouterProvider router={router} />
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   </React.StrictMode>,
 );
 
