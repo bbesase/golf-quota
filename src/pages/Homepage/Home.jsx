@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, query, onSnapshot, getDocs, getDoc, collectionGroup, doc } from 'firebase/firestore';
 import { CompactTable } from '@table-library/react-table-library/compact';
 import { useTheme } from '@table-library/react-table-library/theme';
 import { DEFAULT_OPTIONS, getTheme } from '@table-library/react-table-library/chakra-ui';
 import { Box, Stack, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
+import {Golfer} from 'src/types/golfer.ts';
 
 const key = 'Search';
 
@@ -12,18 +13,20 @@ const nodes = [
   {
     id: '0',
     name: 'Brent Besase',
-    score1: 10,
-    score2: 12,
-    score3: 13,
-    score4: 14,
-    score5: 15,
-    score6: 16,
+    quota1: 10,
+    quota2: 12,
+    quota3: 13,
+    quota4: 14,
+    quota5: 15,
+    quota6: 16,
     average: 15,
   },
 ];
 
 export default function Homepage() {
   let data = {nodes};
+  const [golferData, setGolferData] = useState(null);
+  const [golfers, setGolfers] = useState(null);
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
   const theme = useTheme(chakraTheme);
 
@@ -33,18 +36,18 @@ export default function Homepage() {
     setSearch(event.target.value);
   };
 
-  data = {
-    nodes: data.nodes.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())),
-  };
+  // data = {
+  //   nodes: data.nodes.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())),
+  // };
 
   const COLUMNS = [
-    { label: 'Golfer', renderCell: (item) => item.name },
-    { label: 'Quota 1', renderCell: (item) => item.score1 },
-    { label: 'Quota 2', renderCell: (item) => item.score2 },
-    { label: 'Quota 3', renderCell: (item) => item.score3 },
-    { label: 'Quota 4', renderCell: (item) => item.score4 },
-    { label: 'Quota 5', renderCell: (item) => item.score5 },
-    { label: 'Quota 6', renderCell: (item) => item.score6 },
+    { label: 'Golfer', renderCell: (item) => `${item.firstName} ${item.lastName}` },
+    { label: 'Quota 1', renderCell: (item) => item.quota1 },
+    { label: 'Quota 2', renderCell: (item) => item.quota2 },
+    { label: 'Quota 3', renderCell: (item) => item.quota3 },
+    { label: 'Quota 4', renderCell: (item) => item.quota4 },
+    { label: 'Quota 5', renderCell: (item) => item.quota5 },
+    { label: 'Quota 6', renderCell: (item) => item.quota6 },
     { label: 'Average', renderCell: (item) => item.average },
   ];
 
@@ -55,16 +58,40 @@ export default function Homepage() {
 
     // THIS IS THE ONE
     const test = async () => {
+      let golfers = [];
       const querySnapshot = await getDocs(collection(getFirestore(), "tfd-golfers"));
-      querySnapshot.forEach((doc) => {
+      console.log("snapshot", querySnapshot)
+      await querySnapshot.forEach((doc) => {
         // console.log(`${doc.id} => ${doc.data()}`);
-        const foo = doc.data();
-        console.log('document', doc, foo)
+        const golfer = doc.data();
+        // console.log('document', doc, foo)
+        console.log('array', golfer)
+        golfers.push(golfer);
       });
+      setGolfers(golfers);
+      console.log("golfers", golfers)
+      
+      let nodes = {golfers};
+      console.log('table data', nodes)
+      // for the search
+      // tableData = {
+      //   golfers: tableData.golfers.filter((item) => item.firstName.toLowerCase().includes(search.toLowerCase())),
+      // };
+      console.log('table data2', nodes)
+      setGolferData(nodes);
+      console.log('golf data', golferData)
+      
+
+      console.log('dataaaaa', data)
     };
 
     test();
   }, [])
+
+  const formatDataForTable = () => {
+    console.log('foramt', golfers)
+    return {golfers}
+  }
 
   return (
     // <div>Homepage</div>
@@ -80,9 +107,12 @@ export default function Homepage() {
       </Stack>
       <br />
 
-      <Box p={3} borderWidth="1px" borderRadius="lg">
-        <CompactTable columns={COLUMNS} data={data} theme={theme} />
-      </Box>
+      {golferData && (
+
+        <Box p={3} borderWidth="1px" borderRadius="lg">
+          <CompactTable columns={COLUMNS} data={golferData} theme={theme} />
+        </Box>
+      )}
 
       <br />
     </div>
