@@ -12,7 +12,7 @@ export default function SignIn() {
     signInWithPopup(auth, provider).then((data) => {
       if (data.user.email) {
         setValue(true)
-        localStorage.setItem("authenticated", data.user.email)
+        localStorage.setItem("authenticated", true)
         navigate("/home");
 
       }
@@ -21,7 +21,7 @@ export default function SignIn() {
 
   useEffect(() => {
     setValue(localStorage.getItem('authenticated'))
-    if (value) { navigate("/home") }
+    if (localStorage.getItem('authenticated')) { navigate("/home") }
   }, [])
 
   return (
