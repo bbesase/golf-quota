@@ -21,7 +21,7 @@ export default function SignIn() {
 
   useEffect(() => {
     setValue(localStorage.getItem('authenticated'))
-    if (value) { navigate("/home") }
+    if (localStorage.getItem('authenticated')) { navigate("/home") }
   }, [])
 
   return (
