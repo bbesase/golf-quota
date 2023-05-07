@@ -1,5 +1,5 @@
 export const COLUMNS = [
-  { label: 'Golfer', renderCell: (item: any) => `${item.firstName} ${item.lastName}` },
+  { label: 'Golfer', renderCell: (item: any) => item.firstName },
   { label: 'Quota 1', renderCell: (item: any) => item.quota1 },
   { label: 'Quota 2', renderCell: (item: any) => item.quota2 },
   { label: 'Quota 3', renderCell: (item: any) => item.quota3 },
