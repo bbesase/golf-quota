@@ -47,11 +47,14 @@ export default function Homepage() {
       console.log("snapshot", querySnapshot)
       await querySnapshot.forEach((doc) => {
         // console.log(`${doc.id} => ${doc.data()}`);
+        console.log('doc', doc)
         const golfer: any = doc.data();
         // console.log('document', doc, foo)
         console.log('array', golfer)
+        golfer.guuid = doc.id;
         golfers.push(golfer);
       });
+
       // setGolfers(golfers);
       // console.log("golfers", golfers)
       

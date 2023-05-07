@@ -12,16 +12,28 @@ import {
 } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 import Homepage from "./pages/Homepage/Home";
+import Dashboard from './pages/GolferDashboard/Dashboard';
+import { ChildProcess } from 'child_process';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <SignIn />,
+    children: [
+      {
+        path: 'test',
+        element: <Homepage />
+      },
+    ]
   },
   {
     path: '/home',
     element: <Homepage />
   },
+  // {
+  //   path: '/test',
+  //   element: <Dashboard />,
+  // }
 ]);
 
 createRoot(document.getElementById('root')!).render(

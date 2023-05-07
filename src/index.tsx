@@ -11,6 +11,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import SignIn from './pages/Auth/Sign-in';
 import Homepage from './pages/Homepage/Home';
 import { ChakraProvider } from '@chakra-ui/react'
+import Dashboard from './pages/GolferDashboard/Dashboard';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
     path: '/home',
     element: <Homepage />
   },
+  {
+    path: '/golfer/:id',
+    element: <Dashboard />
+  }
 ]);
 
 createRoot(document.getElementById('root')!).render(
