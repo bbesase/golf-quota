@@ -37,8 +37,6 @@ export default function Table (props: TableProps) {
       <Box p={3} borderWidth="1px" borderRadius="lg">
         <CompactTable columns={COLUMNS} data={data} theme={theme} />
       </Box>
-
-      <Link to={`/golfer/aehQIMIttzVGzSLH9mAz`}>TEST</Link>
     </div>
   )
 }

@@ -18,7 +18,7 @@ import Dashboard from './pages/GolferDashboard/Dashboard';
 // Your web app's Firebase configuration
 
 // Initialize Firebase
-const app = initializeApp(getFirebaseConfig());
+export const app = initializeApp(getFirebaseConfig());
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
