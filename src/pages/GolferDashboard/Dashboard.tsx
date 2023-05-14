@@ -31,9 +31,9 @@ export default function Dashboard(props: any) {
     getGolferInfo();
   }, [golfer]);
 
-
   const handleQuotaChange = async () => {
     if (golfer && newQuota) {
+      golfer.pastScores.unshift(golfer.quota6);
       golfer.quota6 = golfer.quota5;
       golfer.quota5 = golfer.quota4;
       golfer.quota4 = golfer.quota3;
@@ -52,9 +52,11 @@ export default function Dashboard(props: any) {
       quota5: golfer?.quota5,
       quota6: golfer?.quota6,
       average: golfer?.average,
+      pastScores: golfer?.pastScores,
     }).then((response: any)   =>  {
       console.log('response', response)
       setGolfer(golfer);
+      setNewQuota(0);
     })
   }
 
