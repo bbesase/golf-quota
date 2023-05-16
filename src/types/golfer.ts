@@ -11,5 +11,5 @@ export interface Golfer {
   average: number;
   guuid?: string;
   auth: boolean;
-  pastScores: Number [];
+  pastScores: string [];
 }
