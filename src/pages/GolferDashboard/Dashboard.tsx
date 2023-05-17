@@ -15,7 +15,8 @@ import { app } from 'src';
 
 export default function Dashboard(props: any) {
   const [golfer, setGolfer] = useState<Golfer | null>(null);
-  const [newQuota, setNewQuota] = useState<number>(0)
+  const [newQuota, setNewQuota] = useState<number>(0);
+  const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
   const { id } = useParams();
   const db = getFirestore(app);
 
@@ -33,12 +34,13 @@ export default function Dashboard(props: any) {
     };
     
     getGolferInfo();
+    if (localStorage.getItem("adminUser")) { setIsUserAdmin(true) }
   }, []);
 
   const handleQuotaChange = async () => {
     if (golfer && newQuota) {
       const date = new Date();
-      golfer.pastScores.unshift(`${date}^${golfer.quota6}`);
+      golfer.quota6 > 0 ? golfer.pastScores.unshift(`${date}^${golfer.quota6}`) : golfer.pastScores =  [];
       golfer.quota6 = golfer.quota5;
       golfer.quota5 = golfer.quota4;
       golfer.quota4 = golfer.quota3;
@@ -87,7 +89,7 @@ export default function Dashboard(props: any) {
       <GridItem rowSpan={2} colSpan={1} p={24} bg='purple.100'>
         <Heading p={12}>{`${golfer?.firstName} ${golfer?.lastName}`}</Heading>
         <Heading p={12} mt={4}>Average Quota: {golfer?.average}</Heading>
-        {golfer?.auth && (
+        {isUserAdmin && (
           <div>
             <Text fontSize='lg'>New Quota</Text>
             <NumberInput
@@ -121,14 +123,14 @@ export default function Dashboard(props: any) {
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota1 || ''} 
+          value={golfer?.quota1} 
           disabled={true} 
         />
         <Text fontSize='lg' mt={4}>Quota 4</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota4 || ''} 
+          value={golfer?.quota4} 
           disabled={true} 
         />
       </GridItem>
@@ -137,14 +139,14 @@ export default function Dashboard(props: any) {
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota2 || ''} 
+          value={golfer?.quota2} 
           disabled={true} 
         />
         <Text fontSize='lg' mt={4}>Quota 5</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota5 || ''} 
+          value={golfer?.quota5} 
           disabled={true} 
         />
       </GridItem>
@@ -153,14 +155,14 @@ export default function Dashboard(props: any) {
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota3 || ''} 
+          value={golfer?.quota3} 
           disabled={true} 
         />
         <Text fontSize='lg' mt={4}>Quota 6</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota6 || ''} 
+          value={golfer?.quota6} 
           disabled={true} 
         />
       </GridItem>

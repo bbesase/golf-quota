@@ -33,6 +33,7 @@
     "@types/node": "16.11.41",
     "firebase": "^9.8.3",
     "framer-motion": "^10.6.0",
+    "lodash.orderby": "^4.6.0",
     "react": "latest",
     "react-dom": "latest",
     "react-icons": "^4.8.0",
