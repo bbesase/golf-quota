@@ -3,6 +3,8 @@ import { auth, provider } from "../../index";
 import { signInWithPopup } from "firebase/auth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Button } from "@chakra-ui/react";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignIn() {
   const [value, setValue] = useState(false);
@@ -14,7 +16,6 @@ export default function SignIn() {
         setValue(true)
         localStorage.setItem("authenticated", true)
         navigate("/home");
-
       }
     });
   }
@@ -25,16 +26,8 @@ export default function SignIn() {
   }, [])
 
   return (
-    <div>
-      { value ? 
-        // <Home /> :
-        <p>MADE IT</p> :
-        <div>
-          <div>Lets get you signed in</div>
-          <button onClick={handleClick}>Signin With Google</button>
-        </div>
-      }
-      
-    </div>
+    <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center'>
+      <Button size='lg' leftIcon={<FcGoogle />} variant='solid' onClick={handleClick}>Signin With Google</Button>
+    </Box>
   )
 }
