@@ -6,7 +6,11 @@ import { Button, Grid, GridItem, Heading, Input, Text, NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper } from '@chakra-ui/react';
+  NumberDecrementStepper, 
+  VStack,
+  StackDivider,
+  Box,
+  Divider} from '@chakra-ui/react';
 import { app } from 'src';
 
 export default function Dashboard(props: any) {
@@ -29,11 +33,12 @@ export default function Dashboard(props: any) {
     };
     
     getGolferInfo();
-  }, [golfer]);
-
+  }, []);
 
   const handleQuotaChange = async () => {
     if (golfer && newQuota) {
+      const date = new Date();
+      golfer.pastScores.unshift(`${date}^${golfer.quota6}`);
       golfer.quota6 = golfer.quota5;
       golfer.quota5 = golfer.quota4;
       golfer.quota4 = golfer.quota3;
@@ -52,11 +57,24 @@ export default function Dashboard(props: any) {
       quota5: golfer?.quota5,
       quota6: golfer?.quota6,
       average: golfer?.average,
+      pastScores: golfer?.pastScores,
     }).then((response: any)   =>  {
-      console.log('response', response)
       setGolfer(golfer);
+      setNewQuota(0);
     })
   }
+
+  const convertDate = (score: string) => {
+    const unformattedDate = score.split('^')[0];
+    const formattedDate = new Date(unformattedDate).toLocaleString("en-US",  {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    })
+    return formattedDate
+  }
+
+  const convertQuota = (score: string) => score.split('^')[1];
 
   return (
     <Grid 
@@ -106,6 +124,13 @@ export default function Dashboard(props: any) {
           value={golfer?.quota1 || ''} 
           disabled={true} 
         />
+        <Text fontSize='lg' mt={4}>Quota 4</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota4 || ''} 
+          disabled={true} 
+        />
       </GridItem>
       <GridItem colSpan={1} p={24} bg='paleturquoise'>
         <Text fontSize='lg'>Quota 2</Text>
@@ -113,6 +138,13 @@ export default function Dashboard(props: any) {
           size='lg' 
           mt={1} 
           value={golfer?.quota2 || ''} 
+          disabled={true} 
+        />
+        <Text fontSize='lg' mt={4}>Quota 5</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota5 || ''} 
           disabled={true} 
         />
       </GridItem>
@@ -124,33 +156,47 @@ export default function Dashboard(props: any) {
           value={golfer?.quota3 || ''} 
           disabled={true} 
         />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
-        <Text fontSize='lg'>Quota 4</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota4 || ''} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
-        <Text fontSize='lg'>Quota 5</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota5 || ''} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
-        <Text fontSize='lg'>Quota 6</Text>
+        <Text fontSize='lg' mt={4}>Quota 6</Text>
         <Input 
           size='lg' 
           mt={1} 
           value={golfer?.quota6 || ''} 
           disabled={true} 
         />
+      </GridItem>
+      <GridItem colSpan={3} p={24} bg='paleturquoise'>
+        <Text fontSize='3xl'>Past Quotas</Text>
+        <Divider borderColor='gray.200' />
+        {golfer?.pastScores && golfer?.pastScores.length > 0 ? 
+          <Box h='40px'>
+            <VStack
+              divider={<StackDivider borderColor='gray.200' />}
+              spacing={4}
+              align='stretch'
+              scrollBehavior='auto'
+              mt={2}
+            >
+              {golfer.pastScores.map((score, i) => {
+                return (
+                  <Box key={i} display='flex' flexDirection='row' justifyContent='space-between'>
+                    <Text 
+                      fontSize='lg'
+                      width='50%'
+                    >
+                      Date: {convertDate(score)}
+                    </Text>
+                    <Text 
+                      fontSize='lg'
+                      width='50%'
+                    >
+                      Quota: {convertQuota(score)}
+                    </Text>
+                  </Box>
+                )
+            })}
+            </VStack>
+          </Box> : <Text mt={4} fontSize='lg'>Golfer Has No Existing Quotas</Text>
+        }
       </GridItem>
     </Grid>
   )
