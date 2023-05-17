@@ -84,7 +84,7 @@ export default function Dashboard(props: any) {
       gap={4}
       p={8}
     >
-      <GridItem rowSpan={2} colSpan={1} p={24} bg='tomato'>
+      <GridItem rowSpan={2} colSpan={1} p={24} bg='purple.100'>
         <Heading p={12}>{`${golfer?.firstName} ${golfer?.lastName}`}</Heading>
         <Heading p={12} mt={4}>Average Quota: {golfer?.average}</Heading>
         {golfer?.auth && (
@@ -116,7 +116,7 @@ export default function Dashboard(props: any) {
           </div>
         )}
       </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
+      <GridItem colSpan={1} p={24} bg='purple.100'>
         <Text fontSize='lg'>Quota 1</Text>
         <Input 
           size='lg' 
@@ -132,7 +132,7 @@ export default function Dashboard(props: any) {
           disabled={true} 
         />
       </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
+      <GridItem colSpan={1} p={24} bg='purple.100'>
         <Text fontSize='lg'>Quota 2</Text>
         <Input 
           size='lg' 
@@ -148,7 +148,7 @@ export default function Dashboard(props: any) {
           disabled={true} 
         />
       </GridItem>
-      <GridItem colSpan={1} p={24} bg='paleturquoise'>
+      <GridItem colSpan={1} p={24} bg='purple.100'>
         <Text fontSize='lg'>Quota 3</Text>
         <Input 
           size='lg' 
@@ -164,13 +164,13 @@ export default function Dashboard(props: any) {
           disabled={true} 
         />
       </GridItem>
-      <GridItem colSpan={3} p={24} bg='paleturquoise'>
+      <GridItem colSpan={3} p={24} bg='purple.100'>
         <Text fontSize='3xl'>Past Quotas</Text>
-        <Divider borderColor='gray.200' />
+        <Divider borderColor='gray.600' />
         {golfer?.pastScores && golfer?.pastScores.length > 0 ? 
           <Box h='40px'>
             <VStack
-              divider={<StackDivider borderColor='gray.200' />}
+              divider={<StackDivider borderColor='gray.600' />}
               spacing={4}
               align='stretch'
               scrollBehavior='auto'
