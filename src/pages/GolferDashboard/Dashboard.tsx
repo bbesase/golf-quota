@@ -13,11 +13,13 @@ import { Button, Grid, GridItem, Heading, Input, Text, NumberInput,
   Divider} from '@chakra-ui/react';
 import { sortBy, sum } from 'lodash';
 import { app } from 'src';
+import SpinnerProgress from 'src/common/Spinner';
 
 export default function Dashboard(props: any) {
   const [golfer, setGolfer] = useState<Golfer | null>(null);
   const [newQuota, setNewQuota] = useState<number>(0);
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { id } = useParams();
   const db = getFirestore(app);
 
@@ -30,6 +32,7 @@ export default function Dashboard(props: any) {
         if (doc.id === id) {
           golfer.guuid = doc.id;
           setGolfer(golfer);
+          // setHasLoaded(true);
         }
       });
     };
@@ -153,159 +156,170 @@ export default function Dashboard(props: any) {
   const convertQuota = (score: string) => score.split('^')[1];
 
   return (
-    <Grid 
-      h='100%'
-      templateRows='repeat(2, 1fr)'
-      templateColumns='repeat(6, 1fr)'
-      gap={4}
-      p={8}
-    >
-      <GridItem rowSpan={2} colSpan={1} p={24} bg='purple.100'>
-        <Heading p={12}>{`${golfer?.firstName} ${golfer?.lastName}`}</Heading>
-        <Heading p={12} mt={4}>Average Quota: {golfer?.average}</Heading>
-        {isUserAdmin && (
-          <div>
-            <Text fontSize='lg'>New Quota</Text>
-            <NumberInput
-              defaultValue={newQuota}
-              value={newQuota}
-              min={0} 
-              max={100} 
-              step={1} 
-              mt={4} 
-              onChange={value => setNewQuota(Number(value))}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <Button 
-              colorScheme='teal'
-              size='lg'
-              onClick={handleQuotaChange}
-              mt={4}
-            >
-              Submit Quota
-            </Button>
-          </div>
-        )}
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='purple.100'>
-        <Text fontSize='lg'>Quota 1</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota1} 
-          disabled={true} 
-        />
-        <Text fontSize='lg' mt={4}>Quota 6</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota6} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='purple.100'>
-        <Text fontSize='lg'>Quota 2</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota2} 
-          disabled={true} 
-        />
-        <Text fontSize='lg' mt={4}>Quota 7</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota7} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='purple.100'>
-        <Text fontSize='lg'>Quota 3</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota3} 
-          disabled={true} 
-        />
-        <Text fontSize='lg' mt={4}>Quota 8</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota8} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='purple.100'>
-        <Text fontSize='lg'>Quota 4</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota4} 
-          disabled={true} 
-        />
-        <Text fontSize='lg' mt={4}>Quota 9</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota9} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={1} p={24} bg='purple.100'>
-        <Text fontSize='lg'>Quota 5</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota5} 
-          disabled={true} 
-        />
-        <Text fontSize='lg' mt={4}>Quota 10</Text>
-        <Input 
-          size='lg' 
-          mt={1} 
-          value={golfer?.quota10} 
-          disabled={true} 
-        />
-      </GridItem>
-      <GridItem colSpan={5} p={24} bg='purple.100'>
-        <Text fontSize='3xl'>Past Quotas</Text>
-        <Divider borderColor='gray.600' />
-        {golfer?.pastScores && golfer?.pastScores.length > 0 ? 
-          <Box h='40px'>
-            <VStack
-              divider={<StackDivider borderColor='gray.600' />}
-              spacing={4}
-              align='stretch'
-              scrollBehavior='auto'
-              mt={2}
-            >
-              {golfer.pastScores.map((score, i) => {
-                return (
-                  <Box key={i} display='flex' flexDirection='row' justifyContent='space-between'>
-                    <Text 
-                      fontSize='lg'
-                      width='50%'
-                    >
-                      Date: {convertDate(score)}
-                    </Text>
-                    <Text 
-                      fontSize='lg'
-                      width='50%'
-                    >
-                      Quota: {convertQuota(score)}
-                    </Text>
-                  </Box>
-                )
-            })}
-            </VStack>
-          </Box> : <Text mt={4} fontSize='lg'>Golfer Has No Existing Quotas</Text>
-        }
-      </GridItem>
-    </Grid>
+    <>
+    {hasLoaded ? 
+      <Grid 
+        h='100%'
+        templateRows='repeat(2, 1fr)'
+        templateColumns='repeat(6, 1fr)'
+        gap={4}
+        p={8}
+      >
+        <GridItem rowSpan={2} colSpan={1} p={24} bg='purple.100'>
+          <Heading p={12}>{`${golfer?.firstName} ${golfer?.lastName}`}</Heading>
+          <Heading p={12} mt={4}>Average Quota: {golfer?.average}</Heading>
+          {isUserAdmin && (
+            <div>
+              <Text fontSize='lg'>New Quota</Text>
+              <NumberInput
+                defaultValue={newQuota}
+                value={newQuota}
+                min={0} 
+                max={100} 
+                step={1} 
+                mt={4} 
+                onChange={value => setNewQuota(Number(value))}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <Button 
+                colorScheme='teal'
+                size='lg'
+                onClick={handleQuotaChange}
+                mt={4}
+              >
+                Submit Quota
+              </Button>
+            </div>
+          )}
+        </GridItem>
+        <GridItem colSpan={1} p={24} bg='purple.100'>
+          <Text fontSize='lg'>Quota 1</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota1} 
+            disabled={true} 
+          />
+          <Text fontSize='lg' mt={4}>Quota 6</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota6} 
+            disabled={true} 
+          />
+        </GridItem>
+        <GridItem colSpan={1} p={24} bg='purple.100'>
+          <Text fontSize='lg'>Quota 2</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota2} 
+            disabled={true} 
+          />
+          <Text fontSize='lg' mt={4}>Quota 7</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota7} 
+            disabled={true} 
+          />
+        </GridItem>
+        <GridItem colSpan={1} p={24} bg='purple.100'>
+          <Text fontSize='lg'>Quota 3</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota3} 
+            disabled={true} 
+          />
+          <Text fontSize='lg' mt={4}>Quota 8</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota8} 
+            disabled={true} 
+          />
+        </GridItem>
+        <GridItem colSpan={1} p={24} bg='purple.100'>
+          <Text fontSize='lg'>Quota 4</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota4} 
+            disabled={true} 
+          />
+          <Text fontSize='lg' mt={4}>Quota 9</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota9} 
+            disabled={true} 
+          />
+        </GridItem>
+        <GridItem colSpan={1} p={24} bg='purple.100'>
+          <Text fontSize='lg'>Quota 5</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota5} 
+            disabled={true} 
+          />
+          <Text fontSize='lg' mt={4}>Quota 10</Text>
+          <Input 
+            size='lg' 
+            mt={1} 
+            value={golfer?.quota10} 
+            disabled={true} 
+          />
+        </GridItem>
+        <GridItem colSpan={5} p={24} bg='purple.100'>
+          <Text fontSize='3xl'>Past Quotas</Text>
+          <Divider borderColor='gray.600' />
+          {golfer?.pastScores && golfer?.pastScores.length > 0 ? 
+            <Box h='40px'>
+              <VStack
+                divider={<StackDivider borderColor='gray.600' />}
+                spacing={4}
+                align='stretch'
+                scrollBehavior='auto'
+                mt={2}
+              >
+                {golfer.pastScores.map((score, i) => {
+                  return (
+                    <Box key={i} display='flex' flexDirection='row' justifyContent='space-between'>
+                      <Text 
+                        fontSize='lg'
+                        width='50%'
+                      >
+                        Date: {convertDate(score)}
+                      </Text>
+                      <Text 
+                        fontSize='lg'
+                        width='50%'
+                      >
+                        Quota: {convertQuota(score)}
+                      </Text>
+                    </Box>
+                  )
+              })}
+              </VStack>
+            </Box> : <Text mt={4} fontSize='lg'>Golfer Has No Existing Quotas</Text>
+          }
+        </GridItem>
+      </Grid> :
+      <Box
+        h='100%'
+        display='flex'
+        justifyContent='center'
+        alignItems='center'
+      >
+        <SpinnerProgress />
+      </Box>}
+    </>
   )
 }
