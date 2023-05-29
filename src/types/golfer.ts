@@ -8,6 +8,10 @@ export interface Golfer {
   quota4: number;
   quota5: number;
   quota6: number;
+  quota7: number;
+  quota8: number;
+  quota9: number;
+  quota10: number;
   average: number;
   guuid?: string;
   auth: boolean;

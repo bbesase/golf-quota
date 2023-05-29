@@ -23,6 +23,11 @@ export const COLUMNS = [
   { label: 'Quota 4', renderCell: (item: any) => item.quota4 },
   { label: 'Quota 5', renderCell: (item: any) => item.quota5 },
   { label: 'Quota 6', renderCell: (item: any) => item.quota6 },
+  { label: 'Quota 6', renderCell: (item: any) => item.quota6 },
+  { label: 'Quota 7', renderCell: (item: any) => item.quota7 },
+  { label: 'Quota 8', renderCell: (item: any) => item.quota8 },
+  { label: 'Quota 9', renderCell: (item: any) => item.quota9 },
+  { label: 'Quota 10', renderCell: (item: any) => item.quota10 },
   { label: 'Average', renderCell: (item: any) => item.average },
 ];
 

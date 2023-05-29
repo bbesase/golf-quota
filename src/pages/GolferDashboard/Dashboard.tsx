@@ -11,6 +11,7 @@ import { Button, Grid, GridItem, Heading, Input, Text, NumberInput,
   StackDivider,
   Box,
   Divider} from '@chakra-ui/react';
+import { sortBy, sum } from 'lodash';
 import { app } from 'src';
 
 export default function Dashboard(props: any) {
@@ -37,18 +38,87 @@ export default function Dashboard(props: any) {
     if (localStorage.getItem("adminUser")) { setIsUserAdmin(true) }
   }, []);
 
+  const calculateAverage = (golferScoreArray: Number[]) => {
+    let denominator = 0;
+    let zeroCount = 0;
+    let validGolferScoreArray: Number[] = [];
+
+    golferScoreArray.forEach((score) => {
+      if (score === 0) {
+        zeroCount = zeroCount + 1;
+      } else {
+        validGolferScoreArray.push(score);
+      }
+    });
+
+    switch(zeroCount) {
+      case 9:
+        denominator = 1;
+        break;
+      case 8:
+        denominator = 1;
+        break;
+      case 7:
+        denominator = 1;
+        break;
+      case 6:
+        denominator = 2;
+        break;
+      case 5:
+        denominator = 2;
+        break;
+      case 4:
+        denominator = 3;
+        break;
+      case 3:
+        denominator = 3;
+        break;
+      case 2:
+        denominator = 4;
+        break;
+      case 1:
+        denominator = 4;
+        break;
+      case 0:
+        denominator = 5;
+        break;
+    }
+    validGolferScoreArray = sortBy(validGolferScoreArray).reverse().slice(0, denominator);
+    const sumOfScores = sum(validGolferScoreArray);
+    return Math.floor(sumOfScores / denominator);
+  }
+
   const handleQuotaChange = async () => {
     if (golfer && newQuota) {
       const date = new Date();
-      golfer.quota6 > 0 ? golfer.pastScores.unshift(`${date}^${golfer.quota6}`) : golfer.pastScores =  [];
+      golfer.quota10 > 0 ? golfer.pastScores.unshift(`${date}^${golfer.quota6}`) : golfer.pastScores =  [];
+      golfer.quota10 = golfer.quota9;
+      golfer.quota9 = golfer.quota8;
+      golfer.quota8 = golfer.quota7;
+      golfer.quota7 = golfer.quota6;
       golfer.quota6 = golfer.quota5;
       golfer.quota5 = golfer.quota4;
       golfer.quota4 = golfer.quota3;
       golfer.quota3 = golfer.quota2;
       golfer.quota2 = golfer.quota1;
       golfer.quota1 = Number(newQuota);
-      golfer.average = Math.floor(( golfer.quota1 + golfer.quota2 + golfer.quota3 + golfer.quota4 + golfer.quota5 + golfer.quota6 ) / 6)
+
+      const golferScoreArray = [ 
+        golfer.quota1,
+        golfer.quota2,
+        golfer.quota3,
+        golfer.quota4,
+        golfer.quota5,
+        golfer.quota6,
+        golfer.quota7,
+        golfer.quota8,
+        golfer.quota9,
+        golfer.quota10,
+      ];
+
+      golfer.average = calculateAverage(golferScoreArray);
     }
+
     const docRef = doc(db, `tfd-golfers/${id}`);
 
     await updateDoc(docRef, {
@@ -58,6 +128,10 @@ export default function Dashboard(props: any) {
       quota4: golfer?.quota4,
       quota5: golfer?.quota5,
       quota6: golfer?.quota6,
+      quota7: golfer?.quota7,
+      quota8: golfer?.quota8,
+      quota9: golfer?.quota9,
+      quota10: golfer?.quota10,
       average: golfer?.average,
       pastScores: golfer?.pastScores,
     }).then((response: any)   =>  {
@@ -82,7 +156,7 @@ export default function Dashboard(props: any) {
     <Grid 
       h='100%'
       templateRows='repeat(2, 1fr)'
-      templateColumns='repeat(4, 1fr)'
+      templateColumns='repeat(6, 1fr)'
       gap={4}
       p={8}
     >
@@ -126,11 +200,11 @@ export default function Dashboard(props: any) {
           value={golfer?.quota1} 
           disabled={true} 
         />
-        <Text fontSize='lg' mt={4}>Quota 4</Text>
+        <Text fontSize='lg' mt={4}>Quota 6</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota4} 
+          value={golfer?.quota6} 
           disabled={true} 
         />
       </GridItem>
@@ -142,11 +216,11 @@ export default function Dashboard(props: any) {
           value={golfer?.quota2} 
           disabled={true} 
         />
-        <Text fontSize='lg' mt={4}>Quota 5</Text>
+        <Text fontSize='lg' mt={4}>Quota 7</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota5} 
+          value={golfer?.quota7} 
           disabled={true} 
         />
       </GridItem>
@@ -158,15 +232,47 @@ export default function Dashboard(props: any) {
           value={golfer?.quota3} 
           disabled={true} 
         />
-        <Text fontSize='lg' mt={4}>Quota 6</Text>
+        <Text fontSize='lg' mt={4}>Quota 8</Text>
         <Input 
           size='lg' 
           mt={1} 
-          value={golfer?.quota6} 
+          value={golfer?.quota8} 
           disabled={true} 
         />
       </GridItem>
-      <GridItem colSpan={3} p={24} bg='purple.100'>
+      <GridItem colSpan={1} p={24} bg='purple.100'>
+        <Text fontSize='lg'>Quota 4</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota4} 
+          disabled={true} 
+        />
+        <Text fontSize='lg' mt={4}>Quota 9</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota9} 
+          disabled={true} 
+        />
+      </GridItem>
+      <GridItem colSpan={1} p={24} bg='purple.100'>
+        <Text fontSize='lg'>Quota 5</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota5} 
+          disabled={true} 
+        />
+        <Text fontSize='lg' mt={4}>Quota 10</Text>
+        <Input 
+          size='lg' 
+          mt={1} 
+          value={golfer?.quota10} 
+          disabled={true} 
+        />
+      </GridItem>
+      <GridItem colSpan={5} p={24} bg='purple.100'>
         <Text fontSize='3xl'>Past Quotas</Text>
         <Divider borderColor='gray.600' />
         {golfer?.pastScores && golfer?.pastScores.length > 0 ? 
