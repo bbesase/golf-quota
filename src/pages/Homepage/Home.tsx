@@ -13,7 +13,7 @@ import {
   ModalHeader, 
   ModalCloseButton, 
   ModalBody, 
-  ModalFooter, 
+  ModalFooter,
   useDisclosure 
 } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
@@ -70,6 +70,10 @@ export default function Homepage() {
       quota4: 0,
       quota5: 0,
       quota6: 0,
+      quota7: 0,
+      quota8: 0,
+      quota9: 0,
+      quota10: 0,
       average: 0,
     });
     getGolfers();
