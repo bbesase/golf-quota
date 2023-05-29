@@ -32,7 +32,7 @@ export default function Dashboard(props: any) {
         if (doc.id === id) {
           golfer.guuid = doc.id;
           setGolfer(golfer);
-          // setHasLoaded(true);
+          setHasLoaded(true);
         }
       });
     };
