@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Golfer } from 'src/types/golfer';
-import { getFirestore, collection, getDocs, updateDoc, doc, } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { getFirestore, collection, getDocs, updateDoc, doc, deleteDoc, } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Grid, GridItem, Heading, Input, Text, NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -10,18 +10,30 @@ import { Button, Grid, GridItem, Heading, Input, Text, NumberInput,
   VStack,
   StackDivider,
   Box,
-  Divider} from '@chakra-ui/react';
+  Divider,
+  Modal, 
+  ModalOverlay, 
+  ModalContent, 
+  ModalHeader, 
+  ModalCloseButton, 
+  ModalBody, 
+  ModalFooter,
+  useDisclosure
+} from '@chakra-ui/react';
 import { sortBy, sum } from 'lodash';
 import { app } from 'src';
 import SpinnerProgress from 'src/common/Spinner';
 
-export default function Dashboard(props: any) {
+export default function Dashboard() {
   const [golfer, setGolfer] = useState<Golfer | null>(null);
   const [newQuota, setNewQuota] = useState<number>(0);
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { id } = useParams();
   const db = getFirestore(app);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = React.useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getGolferInfo = async () => {
@@ -155,6 +167,12 @@ export default function Dashboard(props: any) {
 
   const convertQuota = (score: string) => score.split('^')[1];
 
+  const deleteGolfer = async () => {
+    await deleteDoc(doc(db, `tfd-golfers/${id}`));
+    onClose();
+    navigate("/home");
+  }
+
   return (
     <>
     {hasLoaded ? 
@@ -193,6 +211,14 @@ export default function Dashboard(props: any) {
                 mt={4}
               >
                 Submit Quota
+              </Button>
+              <Button 
+                colorScheme='teal'
+                size='lg'
+                onClick={onOpen}
+                mt={4}
+              >
+                Delete Golfer
               </Button>
             </div>
           )}
@@ -311,6 +337,21 @@ export default function Dashboard(props: any) {
             </Box> : <Text mt={4} fontSize='lg'>Golfer Has No Existing Quotas</Text>
           }
         </GridItem>
+
+        <Modal initialFocusRef={initialRef} closeOnOverlayClick={false} onClose={onClose} isOpen={isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Deletion</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>{`Are you sure you want to delete the golfer: ${golfer?.firstName} ${golfer?.lastName}`}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button mr={4} onClick={deleteGolfer} size='lg' colorScheme='teal'>Add Golfer</Button>
+            <Button onClick={onClose} size='lg'>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       </Grid> :
       <Box
         h='100%'
