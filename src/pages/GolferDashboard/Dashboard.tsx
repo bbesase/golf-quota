@@ -347,8 +347,8 @@ export default function Dashboard() {
             <Text>{`Are you sure you want to delete the golfer: ${golfer?.firstName} ${golfer?.lastName}`}</Text>
           </ModalBody>
           <ModalFooter>
-            <Button mr={4} onClick={deleteGolfer} size='lg' colorScheme='teal'>Add Golfer</Button>
-            <Button onClick={onClose} size='lg'>Close</Button>
+            <Button mr={4} onClick={deleteGolfer} size='lg' colorScheme='teal'>Delete Golfer</Button>
+            <Button onClick={onClose} size='lg'>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
