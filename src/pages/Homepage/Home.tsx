@@ -49,7 +49,7 @@ export default function Homepage() {
       golfers.push(golfer);
     });
 
-    golfers = orderBy(golfers, ['firstName', 'lastName'], ['asc', 'asc']);
+    golfers = orderBy(golfers, ['lastName', 'firstName'], ['asc', 'asc']);
     setGolferData(golfers);
     setFilteredData(golfers);
   };
