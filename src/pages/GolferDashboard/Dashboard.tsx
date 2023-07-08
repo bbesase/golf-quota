@@ -229,7 +229,8 @@ export default function Dashboard() {
             size='lg' 
             mt={1} 
             value={golfer?.quota1} 
-            disabled={true} 
+            disabled={true}
+            minWidth='75px'
           />
           <Text fontSize='lg' mt={4}>Quota 6</Text>
           <Input 
@@ -237,6 +238,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota6} 
             disabled={true} 
+            minWidth='75px'
           />
         </GridItem>
         <GridItem colSpan={1} p={24} bg='purple.100'>
@@ -246,6 +248,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota2} 
             disabled={true} 
+            minWidth='75px'
           />
           <Text fontSize='lg' mt={4}>Quota 7</Text>
           <Input 
@@ -253,6 +256,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota7} 
             disabled={true} 
+            minWidth='75px'
           />
         </GridItem>
         <GridItem colSpan={1} p={24} bg='purple.100'>
@@ -262,6 +266,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota3} 
             disabled={true} 
+            minWidth='75px'
           />
           <Text fontSize='lg' mt={4}>Quota 8</Text>
           <Input 
@@ -269,6 +274,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota8} 
             disabled={true} 
+            minWidth='75px'
           />
         </GridItem>
         <GridItem colSpan={1} p={24} bg='purple.100'>
@@ -278,6 +284,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota4} 
             disabled={true} 
+            minWidth='75px'
           />
           <Text fontSize='lg' mt={4}>Quota 9</Text>
           <Input 
@@ -294,6 +301,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota5} 
             disabled={true} 
+            minWidth='75px'
           />
           <Text fontSize='lg' mt={4}>Quota 10</Text>
           <Input 
@@ -301,6 +309,7 @@ export default function Dashboard() {
             mt={1} 
             value={golfer?.quota10} 
             disabled={true} 
+            minWidth='75px'
           />
         </GridItem>
         <GridItem colSpan={5} p={24} bg='purple.100'>
